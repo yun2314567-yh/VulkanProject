@@ -1,0 +1,4 @@
+本项目基于vulkan1.3版本，但在本项目中并未包含vulkan库,请自行下载,
+启用了着色器对象扩展等扩展，扩展可在device.cpp的deviceExtensions中查看，
+对管线的配置在renderSystem类中查看，编写shader后请点击compiledShader.bat编译.vert和.frag文件为.spv文件，程序中的shader路径并未直接暴露在app类内，可通过启动程序后，在窗口内通过拖拽修改，
+不支持shader描述符集不同的情况，如果不同请关闭程序，修改描述符集。 当启动程序后，按tab键切换鼠标显示来操控摄像头，注意请勿在点击shader路径窗口时，进行摄像头操控会报找不到shader路径的错误。
