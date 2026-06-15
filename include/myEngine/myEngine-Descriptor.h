@@ -103,16 +103,21 @@ namespace myEngine {
 	{
 	public:
 		DescriptorWriter(DescriptorSetLayout& setLayout, DescriptorPool& pool);
-		DescriptorWriter& writeBuffer(uint32_t bindingLocation, VkDescriptorBufferInfo* bufferInfo);
-		DescriptorWriter& writeImage(uint32_t bindingLocation, VkDescriptorImageInfo* imageInfo);
+		DescriptorWriter& writeBuffer(uint32_t bindingLocation, VkDescriptorBufferInfo& bufferInfo);
+		DescriptorWriter& writeImage(uint32_t bindingLocation, VkDescriptorImageInfo& imageInfo);
 		bool build(VkDescriptorSet& descriptorSet);//在指令写入时直接调用
 		void update(VkDescriptorSet& descriptorSet);
 	private:
 		void overwrite(VkDescriptorSet& descriptorSet);
 		DescriptorSetLayout& setLayout;
 		DescriptorPool& pool;
-		std::vector<VkWriteDescriptorSet> writes;
-		 
+        std::vector<VkWriteDescriptorSet> writes;
+		std::vector<VkDescriptorImageInfo> imageCache;
+		std::vector<VkDescriptorBufferInfo> bufferCache;
+		// indices of writes that correspond to entries in imageCache / bufferCache
+		// used to assign stable pointers in overwrite() to avoid pointer invalidation
+		std::vector<size_t> imageWriteIndices;
+		std::vector<size_t> bufferWriteIndices;
 	};
 	
 }
