@@ -2,11 +2,11 @@
 
 namespace myEngine
 {
-	Texture::Texture(Device& device, const uint32_t& texWidth, const uint32_t& texHeight, const VkImageType& imageType, const VkFormat& format,
+	Texture::Texture(Device& device, const uint32_t& texWidth, const uint32_t& texHeight, const VkImageType& imageType, const VkFormat format,
 		const VkImageTiling& tiling, const VkImageUsageFlags& usage, const VkSharingMode& sharingMode,
-		const VkSampleCountFlagBits& sampleWay) :device{ device }
+		const VkSampleCountFlagBits& sampleWay) :device{device}, textureFormat(format)
 	{
-		device.createImage(texWidth, texHeight, imageType, format, tiling, usage, sharingMode, sampleWay, textureImage, textureImageMemory);
+		device.createImage(texWidth, texHeight, imageType, textureFormat, tiling, usage, sharingMode, sampleWay, textureImage, textureImageMemory);
 	 }
 
 	VkDescriptorImageInfo Texture::descriptorImageInfoBuild(VkImageLayout imageLayout )
@@ -14,7 +14,7 @@ namespace myEngine
 		return { sampler, textureImageView, imageLayout};
 	}
 
-	void Texture::createSampler(VkFilter filterMode,VkSamplerAddressMode overSampleMode,VkBool32 isShadowMap,VkCompareOp shadowDepthCompareMode)
+	void Texture::createSampler(VkFilter filterMode,VkSamplerAddressMode overSampleMode, VkBorderColor color, VkBool32 compareAble,VkCompareOp compareOp)
 	{
 		
 		VkSamplerCreateInfo samplerInfo = {};
@@ -26,10 +26,10 @@ namespace myEngine
 		samplerInfo.addressModeW = overSampleMode;
 		samplerInfo.anisotropyEnable = VK_TRUE;
 		samplerInfo.maxAnisotropy = 8;
-		samplerInfo.borderColor = VK_BORDER_COLOR_INT_OPAQUE_BLACK;
+		samplerInfo.borderColor = color;
 		samplerInfo.unnormalizedCoordinates = VK_FALSE;
-		samplerInfo.compareEnable = isShadowMap;
-		samplerInfo.compareOp = shadowDepthCompareMode;
+		samplerInfo.compareEnable = compareAble;
+		samplerInfo.compareOp = compareOp;
 		samplerInfo.mipmapMode = VK_SAMPLER_MIPMAP_MODE_LINEAR;
 		samplerInfo.mipLodBias = 0;
 

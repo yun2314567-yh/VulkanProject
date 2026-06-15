@@ -89,7 +89,7 @@ namespace myEngine
 			{
 				auto bufferInfo = uboBuffers[modelName][i]->descriptorBufferBuild();
 				bool success = DescriptorWriter(*uboSetLayout, *uboDescriptorPool)
-					.writeBuffer(0, &bufferInfo)
+					.writeBuffer(0, bufferInfo)
 					.build(uboSets[modelName][i]);
 
 				if (!success)
@@ -118,7 +118,7 @@ namespace myEngine
 	void Material::updateTexture(VkDescriptorSet targetSet, myTextureType texType, VkDescriptorImageInfo texture)
 	{
 		DescriptorWriter writer(*textureSetLayout, *textureDescriptorPool);
-		writer.writeImage(texType, &texture);
+		writer.writeImage(texType, texture);
 		writer.update(targetSet);
 	}
 
@@ -169,7 +169,7 @@ namespace myEngine
 		device.copyBuffer2Image(stageBuffer.getBuffer(), texture->getTextureImage(), static_cast<uint32_t>(texWidth), static_cast<uint32_t>(texHeight));
 		device.transitionImageLayout(texture->getTextureImage(), VK_FORMAT_R8G8B8A8_SRGB, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
 		texture->createTextureImageView();
-		texture->CreateSampler();
+		texture->setSampler();
 		return texture;
 	}
 
@@ -232,7 +232,7 @@ namespace myEngine
 		device.transitionImageLayout(whiteTexture->getTextureImage(), VK_FORMAT_R8G8B8A8_SRGB, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
 
 		whiteTexture->createTextureImageView();
-		whiteTexture->CreateSampler();
+		whiteTexture->setSampler();
 
 		defaultTextures[DIFFUSE] = whiteTexture;
 		defaultTextures[SPECULAR] = whiteTexture;
@@ -258,7 +258,7 @@ namespace myEngine
 		device.transitionImageLayout(normalMap->getTextureImage(), VK_FORMAT_R8G8B8A8_SRGB, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
 
 		normalMap->createTextureImageView();
-		normalMap->CreateSampler();
+		normalMap->setSampler();
 
 		defaultTextures[NORMAL] = normalMap;
 	}
@@ -283,7 +283,7 @@ namespace myEngine
 		device.transitionImageLayout(fallBackTexture->getTextureImage(), VK_FORMAT_R8G8B8A8_SRGB, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
 
 		fallBackTexture->createTextureImageView();
-		fallBackTexture->CreateSampler();
+		fallBackTexture->setSampler();
 
 		
 	}

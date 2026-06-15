@@ -3,16 +3,8 @@
 #include<cassert>
 namespace myEngine
 {
-	offScreenRenderer:: offScreenRenderer(Device& device,VkExtent2D extent,VkFormat colorFormat,bool isShadowPass):_device(device),_extent(extent),colorFormat(colorFormat),isShadowPass(isShadowPass)
-	{
-		depthFormat = _device.findDepthFormat();
-		if(isShadowPass==false)
-		createColorImage();
-		
-		
-		
-		
-	}
+	offScreenRenderer:: offScreenRenderer(Device& device,VkExtent2D extent,bool isShadowPass):_device(device),_extent(extent),isShadowPass(isShadowPass){}
+	
 
 	void offScreenRenderer::beginPass(VkCommandBuffer command)
 	{
@@ -26,15 +18,6 @@ namespace myEngine
 		area.offset = { 0,0 };
 		area.extent = _extent;
 
-		/*VkRenderPassBeginInfo passBeginInfo = {};
-		passBeginInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
-		passBeginInfo.clearValueCount = 2;
-		passBeginInfo.pClearValues = clearValue;
-		passBeginInfo.framebuffer = _frameBuffer;
-		passBeginInfo.renderArea = area;
-		passBeginInfo.renderPass = _renderPass;
-
-		vkCmdBeginRenderPass(command, &passBeginInfo, VK_SUBPASS_CONTENTS_INLINE);*/
 		
 		
 		VkRenderingAttachmentInfo depthAttachment = {};
@@ -44,7 +27,7 @@ namespace myEngine
 		depthAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
 		depthAttachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
 		depthAttachment.imageLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
-		depthAttachment.imageView = depthImageView;
+		depthAttachment.imageView = depthTex->getTextureImageView();
 		
 		VkRenderingInfo renderInfo = {};
 		renderInfo.sType = VK_STRUCTURE_TYPE_RENDERING_INFO;
@@ -56,7 +39,7 @@ namespace myEngine
 		renderInfo.layerCount = 1;
 		
 		VkRenderingAttachmentInfo colorAttachment = {};
-
+		std::cout << "激活shadow: " << isShadowPass << std::endl;
 		if (isShadowPass==false)
 		{
 			
@@ -65,7 +48,7 @@ namespace myEngine
 			colorAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
 			colorAttachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
 			colorAttachment.imageLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
-			colorAttachment.imageView = colorImageView;
+			colorAttachment.imageView = colorTex->getTextureImageView();
 			
 			renderInfo.colorAttachmentCount = 1;
 		  renderInfo.pColorAttachments = &colorAttachment;
@@ -100,7 +83,7 @@ namespace myEngine
 
 
 	}
-	void offScreenRenderer::createColorImage()
+	/*void offScreenRenderer::createColorImage()
 	{
 		_device.createImage(_extent.width, _extent.height, 
 			VK_IMAGE_TYPE_2D, 
@@ -138,70 +121,7 @@ namespace myEngine
 			_device.transitionImageLayout(depthImage, depthFormat, VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL);
 	}
 
-	/*void offScreenRenderer::createRenderPass()
-	{
-		VkAttachmentDescription colorAttach = {};
-		colorAttach.format = colorFormat;
-		colorAttach.samples = VK_SAMPLE_COUNT_1_BIT;
-		colorAttach.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
-		colorAttach.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
-		colorAttach.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
-		colorAttach.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
-		colorAttach.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
-		colorAttach.finalLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
-
-		VkAttachmentDescription depthAttachment={};
-		depthAttachment.format = depthFormat;
-		depthAttachment.samples = VK_SAMPLE_COUNT_1_BIT;
-		depthAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
-		depthAttachment.storeOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
-		depthAttachment.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
-		depthAttachment.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
-		depthAttachment.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
-		depthAttachment.finalLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
-
-		VkAttachmentReference colorRef = {0,VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL};
-		VkAttachmentReference depthRef = { 1,VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL };
-
-		VkSubpassDescription subpass = {};
-		subpass.pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
-		subpass.colorAttachmentCount = 1;
-		subpass.pColorAttachments = &colorRef;
-		subpass.pDepthStencilAttachment = &depthRef;
-
-		std::array<VkAttachmentDescription, 2> attachments = { colorAttach,depthAttachment };
-
-		VkRenderPassCreateInfo passInfo = {};
-		passInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
-		passInfo.attachmentCount = attachments.size();
-		passInfo.pAttachments = attachments.data();
-		passInfo.subpassCount = 1;
-		passInfo.pSubpasses = &subpass;
-		
-		if (vkCreateRenderPass(_device.getLogicalDevice(), &passInfo, nullptr, &_renderPass) != VK_SUCCESS)
-			throw std::runtime_error("离屏Pass创建失败");
-
-
-
-	}*/
-
-	/*void offScreenRenderer::createFrameBuffer()
-	{
-		std::array<VkImageView, 2> imageViews = { colorImageView,depthImageView };
-
-		VkFramebufferCreateInfo frameInfo = {};
-		frameInfo.sType= VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
-		frameInfo.width = _extent.width;
-		frameInfo.height = _extent.height;
-		frameInfo.attachmentCount = imageViews.size();
-		frameInfo.pAttachments = imageViews.data();
-
-		frameInfo.renderPass = _renderPass;
-		frameInfo.layers = 1;
-
-		if (vkCreateFramebuffer(_device.getLogicalDevice(), &frameInfo, nullptr, &_frameBuffer) != VK_SUCCESS)
-			throw std::runtime_error("离屏Frame创建失败");
-	}*/
+	
 
 	void offScreenRenderer::createSampler(VkFilter filter,
 		VkSamplerAddressMode mode,
@@ -231,5 +151,5 @@ namespace myEngine
 
 		if (vkCreateSampler(_device.getLogicalDevice(), &samplerInfo, nullptr, &sampler) != VK_SUCCESS)
 			throw std::runtime_error("离屏采样器创建失败");
-	}
+	}*/
 }

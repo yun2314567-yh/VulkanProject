@@ -174,14 +174,14 @@ namespace myEngine
 	{
 		depthFormat = device.findDepthFormat();
 
+		depthTexture = std::make_unique<Texture>(device, swapChainExtent.width, swapChainExtent.height, VK_IMAGE_TYPE_2D, depthFormat, VK_IMAGE_TILING_OPTIMAL,
+			VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT, VK_SHARING_MODE_EXCLUSIVE, VK_SAMPLE_COUNT_1_BIT);
+		depthTexture->createTextureImageView(VK_IMAGE_ASPECT_DEPTH_BIT);
 
 
-		device.createImage(swapChainExtent.width, swapChainExtent.height, VK_IMAGE_TYPE_2D, depthFormat, VK_IMAGE_TILING_OPTIMAL,
-			VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT, VK_SHARING_MODE_EXCLUSIVE, VK_SAMPLE_COUNT_1_BIT, depthImage, depthMemory);
+		
 
-		depthImageView = device.createImageView(depthImage, depthFormat, VK_IMAGE_ASPECT_DEPTH_BIT);
-
-		device.transitionImageLayout(depthImage, depthFormat, VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL);
+		device.transitionImageLayout(depthTexture->getTextureImage(), depthFormat, VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL);
 
 	}
 
@@ -211,7 +211,7 @@ namespace myEngine
 		colorAttachment.finalLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
 
 		VkAttachmentDescription depthAttachment = {};
-		depthAttachment.format = device.findDepthFormat();
+		depthAttachment.format = depthFormat;
 		depthAttachment.samples = VK_SAMPLE_COUNT_1_BIT;
 		depthAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
 		depthAttachment.storeOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
@@ -259,7 +259,7 @@ namespace myEngine
 
 		for (size_t i = 0; i < swapChainImageViews.size(); i++)
 		{
-			std::array<VkImageView, 2> attachments = { swapChainImageViews[i],depthImageView };
+			std::array<VkImageView, 2> attachments = { swapChainImageViews[i],depthTexture->getTextureImageView()};
 
 			VkFramebufferCreateInfo frameBufferInfo = {};
 			frameBufferInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;

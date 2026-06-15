@@ -58,24 +58,38 @@ namespace myEngine
 
 		VkDescriptorSet shadowSet[3];
 
+		std::unique_ptr<Texture> colorImage = std::make_unique<Texture>(_device, _window.getExtent2D().width, _window.getExtent2D().height, VK_IMAGE_TYPE_2D
+			, VK_FORMAT_R8G8B8A8_SRGB, VK_IMAGE_TILING_OPTIMAL, VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT|VK_IMAGE_USAGE_SAMPLED_BIT, VK_SHARING_MODE_EXCLUSIVE,VK_SAMPLE_COUNT_1_BIT);
+		colorImage->createTextureImageView(VK_IMAGE_ASPECT_COLOR_BIT);
+		colorImage->setSampler(VK_FILTER_LINEAR, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE);
 		
-		
-		
+		std::unique_ptr<Texture> depthImage = std::make_unique<Texture>(_device, _window.getExtent2D().width, _window.getExtent2D().height
+			, VK_IMAGE_TYPE_2D, _device.findDepthFormat(), VK_IMAGE_TILING_OPTIMAL, VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT, VK_SHARING_MODE_EXCLUSIVE, VK_SAMPLE_COUNT_1_BIT);
+		depthImage->createTextureImageView(VK_IMAGE_ASPECT_DEPTH_BIT);
+		depthImage->setSampler(VK_FILTER_NEAREST, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_BORDER, VK_BORDER_COLOR_INT_OPAQUE_WHITE);
+
+		std::unique_ptr<Texture> shadowImage= std::make_unique<Texture>(_device, 2560, 2560
+			, VK_IMAGE_TYPE_2D, _device.findDepthFormat(), VK_IMAGE_TILING_OPTIMAL, VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT|VK_IMAGE_USAGE_SAMPLED_BIT, VK_SHARING_MODE_EXCLUSIVE, VK_SAMPLE_COUNT_1_BIT);
+		shadowImage->createTextureImageView(VK_IMAGE_ASPECT_DEPTH_BIT);
+		shadowImage->setSampler(VK_FILTER_NEAREST, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_BORDER, VK_BORDER_COLOR_INT_OPAQUE_WHITE);
+
 		
 		//用于渲染模型
-		offRenderer = std::make_unique<offScreenRenderer>(_device, _window.getExtent2D(), VK_FORMAT_R8G8B8A8_SRGB,false);
-		offRenderer->setAndCreateDepthImage(VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT);
-		offRenderer->setAndCreateSampler();
+		offRenderer = std::make_unique<offScreenRenderer>(_device, _window.getExtent2D(),false);
+		offRenderer->setColorImage(std::move(colorImage));
+		offRenderer->setDepthImage(std::move(depthImage));
+		_device.transitionImageLayout(offRenderer->getColorImage(), offRenderer->getColorImageFormat(), VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+		_device.transitionImageLayout(offRenderer->getDepthImage(), offRenderer->getDepthImageFormat(), VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL);
+
 		//用于渲染阴影贴图
-		shadowRenderer = std::make_unique<offScreenRenderer>(_device,VkExtent2D{ 2560,2560 }, VK_FORMAT_R8G8B8A8_SRGB, true);
-		shadowRenderer->setAndCreateDepthImage(VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT| VK_IMAGE_USAGE_SAMPLED_BIT);
-		shadowRenderer->setAndCreateSampler(VK_FILTER_NEAREST,VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_BORDER, VK_BORDER_COLOR_FLOAT_OPAQUE_WHITE, VK_FALSE, VK_COMPARE_OP_NEVER);
-		
-		VkDescriptorImageInfo shadowImage = { shadowRenderer->getSampler(),shadowRenderer->getDepthImageView(),VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL };
+		shadowRenderer = std::make_unique<offScreenRenderer>(_device,VkExtent2D{ 2560,2560 }, true);
+		shadowRenderer->setDepthImage(std::move(shadowImage));
+		_device.transitionImageLayout(shadowRenderer->getDepthImage(), shadowRenderer->getDepthImageFormat(), VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+		//VkDescriptorImageInfo shadowImage = { shadowRenderer->getSampler(),shadowRenderer->getDepthImageView(),VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL };
 		for (int i = 0; i < 3; i++)
 		{
-			
-			shadowLayoutWriter.writeImage(0, &shadowImage);
+			VkDescriptorImageInfo imageInfo = shadowRenderer->getDepthImageInfo(VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+			shadowLayoutWriter.writeImage(0,imageInfo);
 			shadowLayoutWriter.build(shadowSet[i]);
 		}
 		
@@ -84,7 +98,7 @@ namespace myEngine
 		RenderSystem _renderSystem(_device);
 
 		//将离屏渲染器的输出绑定到GUI上
-		_gui->initTextureID(offRenderer->getSampler(), offRenderer->getColorImageView());
+		_gui->initTextureID(offRenderer->getColorSampler(), offRenderer->getColorImageView());
 
 
 		//模型和UBO设置
@@ -147,17 +161,24 @@ namespace myEngine
 				viewSize.height != offRenderer->getExtent().height)
 			{
 				vkDeviceWaitIdle(_device.getLogicalDevice());
+				std::unique_ptr<Texture> colorImage = std::make_unique<Texture>(_device, viewSize.width, viewSize.height, VK_IMAGE_TYPE_2D
+					, VK_FORMAT_R8G8B8A8_SRGB, VK_IMAGE_TILING_OPTIMAL, VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_SAMPLED_BIT, VK_SHARING_MODE_EXCLUSIVE,VK_SAMPLE_COUNT_1_BIT);
+				colorImage->createTextureImageView(VK_IMAGE_ASPECT_COLOR_BIT);
+				colorImage->setSampler(VK_FILTER_LINEAR, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE);
 
-				offRenderer = std::make_unique<offScreenRenderer>(
-					_device, viewSize, VK_FORMAT_R8G8B8A8_SRGB);
-				offRenderer->setAndCreateDepthImage(VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT);
-				offRenderer->setAndCreateSampler();
+				std::unique_ptr<Texture> depthImage = std::make_unique<Texture>(_device, viewSize.width, viewSize.height
+					, VK_IMAGE_TYPE_2D, _device.findDepthFormat(), VK_IMAGE_TILING_OPTIMAL, VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT, VK_SHARING_MODE_EXCLUSIVE, VK_SAMPLE_COUNT_1_BIT);
+				depthImage->createTextureImageView(VK_IMAGE_ASPECT_DEPTH_BIT);
+				depthImage->setSampler(VK_FILTER_NEAREST, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_BORDER, VK_BORDER_COLOR_INT_OPAQUE_WHITE);
 
-				shadowRenderer = std::make_unique<offScreenRenderer>(_device, VkExtent2D{ 2560,2560 }, VK_FORMAT_R8G8B8A8_SRGB, true);
-				shadowRenderer->setAndCreateDepthImage(VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT | VK_IMAGE_USAGE_SAMPLED_BIT);
-				shadowRenderer->setAndCreateSampler(VK_FILTER_NEAREST, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_BORDER, VK_BORDER_COLOR_FLOAT_OPAQUE_WHITE, VK_FALSE, VK_COMPARE_OP_NEVER);
+				offRenderer = std::make_unique<offScreenRenderer>(_device, viewSize);
+				offRenderer->setColorImage(std::move(colorImage));
+				offRenderer->setDepthImage(std::move(depthImage));
+				_device.transitionImageLayout(offRenderer->getColorImage(), offRenderer->getColorImageFormat(), VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+				_device.transitionImageLayout(offRenderer->getDepthImage(), offRenderer->getDepthImageFormat(), VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL);
 
-				_gui->initTextureID(offRenderer->getSampler(), offRenderer->getColorImageView());
+
+				_gui->initTextureID(offRenderer->getColorSampler(), offRenderer->getColorImageView());
 			}
 			
 			//model_ubo.proj = glm::orthoRH_ZO(-20.f, 20.f, -20.f, 20.f, 0.1f, 30.f);
@@ -212,8 +233,8 @@ namespace myEngine
 
 				_device.transitionImageLayout(shadowRenderer->getDepthImage(), shadowRenderer->getDepthImageFormat(), VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,commandBuffer);
 
-				shadowImage = { shadowRenderer->getSampler(),shadowRenderer->getDepthImageView(),VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL };
-				shadowLayoutWriter.writeImage(0, &shadowImage);
+				VkDescriptorImageInfo imageInfo = shadowRenderer->getDepthImageInfo(VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+				shadowLayoutWriter.writeImage(0, imageInfo);
 				shadowLayoutWriter.update(shadowSet[frameIndex]);
 				
 
