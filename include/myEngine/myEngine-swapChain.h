@@ -1,7 +1,7 @@
 #pragma once
 #include<memory>
 #include"myEngine-device.h"
-
+#include"myEngine-Texture.h"
 
 namespace myEngine
 {
@@ -25,9 +25,7 @@ namespace myEngine
 				vkDestroyFramebuffer(device.getLogicalDevice(), fb, nullptr);
 
 			vkDestroyRenderPass(device.getLogicalDevice(), _renderPass, nullptr);
-			vkDestroyImageView(device.getLogicalDevice(), depthImageView, nullptr);
-			vkDestroyImage(device.getLogicalDevice(), depthImage, nullptr);
-			vkFreeMemory(device.getLogicalDevice(), depthMemory, nullptr);
+			
 
 			for (auto& iv : swapChainImageViews)
 				vkDestroyImageView(device.getLogicalDevice(), iv, nullptr);
@@ -57,7 +55,7 @@ namespace myEngine
 		VkFence getCurrentFence() { return inFlightFences[currentFrame]; }
 
 		VkImageView getImageView(const int index) { return swapChainImageViews[index]; }
-		VkImageView getDepthImageView() { return depthImageView; }
+		VkImageView getDepthImageView() { return depthTexture->getTextureImageView(); }
 
 		VkResult acquireNextImage(uint32_t* imageIndex);
 
@@ -100,9 +98,7 @@ namespace myEngine
 		VkFormat depthFormat;
 		VkExtent2D swapChainExtent;
 
-		VkImage depthImage;
-		VkImageView depthImageView;
-		VkDeviceMemory depthMemory;
+		std::unique_ptr<Texture> depthTexture;
 
 		VkSurfaceFormatKHR chooseSwapSurfaceFormat(const std::vector<VkSurfaceFormatKHR>& availableFormats); 
 		VkPresentModeKHR chooseSwapPresentMode(const std::vector<VkPresentModeKHR>& availablePresentModes);

@@ -1,12 +1,12 @@
 #pragma once
 #include"myEngine-device.h"
-
+#include"myEngine-Texture.h"
 namespace myEngine
 {
 	class offScreenRenderer
 	{
 	public:
-		offScreenRenderer(Device& device, VkExtent2D extent, VkFormat colorFormat, bool isShadowPass = false);
+		offScreenRenderer(Device& device, VkExtent2D extent, bool isShadowPass = false);
 		~offScreenRenderer()
 		{
 			vkDestroySampler(_device.getLogicalDevice(), sampler, nullptr);
@@ -20,15 +20,21 @@ namespace myEngine
 			//vkDestroyRenderPass(_device.getLogicalDevice(), _renderPass, nullptr);
 		}
 
+		void setColorImage(std::unique_ptr<Texture> colorImage) { colorTex = std::move(colorImage); }
+		void setDepthImage(std::unique_ptr<Texture> depthImage) { depthTex = std::move(depthImage); }
 		//VkRenderPass getRenderPass() { return _renderPass; }
-		VkImage getColorImage() { return colorImage; }
-		VkFormat getColorImageFormat() { return colorFormat; }
-		VkImage getDepthImage() { return depthImage; }
-		VkFormat getDepthImageFormat() { return depthFormat; }
-		VkSampler getSampler() { return sampler; }
-		VkImageView getColorImageView() { return colorImageView; }
-		VkImageView getDepthImageView() { return depthImageView; }
+		VkImage getColorImage() { return colorTex->getTextureImage(); }
+		VkFormat getColorImageFormat() { return colorTex->getTextureFormat(); }
+		VkImage getDepthImage() { return depthTex->getTextureImage(); }
+		VkFormat getDepthImageFormat() { return depthTex->getTextureFormat(); }
+		VkDescriptorImageInfo getDepthImageInfo(VkImageLayout imageLayout) { return depthTex->descriptorImageInfoBuild(imageLayout); }
+		VkDescriptorImageInfo getColorImageInfo(VkImageLayout imageLayout) { return colorTex->descriptorImageInfoBuild(imageLayout); }
+		VkImageView getColorImageView() { return colorTex->getTextureImageView(); }
+		VkImageView getDepthImageView() { return depthTex->getTextureImageView(); }
 		VkExtent2D getExtent() { return _extent; }
+
+		VkSampler getColorSampler() { return colorTex->getSampler(); }
+		VkSampler getDepthSampler() { return depthTex->getSampler(); }
 
 		void setAndCreateDepthImage(VkImageUsageFlags  useflags) { createDepthImage(useflags); }
 		void setAndCreateSampler(VkFilter filter=VK_FILTER_LINEAR,
@@ -60,8 +66,11 @@ namespace myEngine
 
 		VkExtent2D _extent;
 
-		VkFormat colorFormat;
+		
 		VkFormat depthFormat;
+
+		std::unique_ptr<Texture> colorTex;
+		std::unique_ptr<Texture> depthTex;
 
 		VkImage colorImage;
 		VkDeviceMemory colorImageMem;
