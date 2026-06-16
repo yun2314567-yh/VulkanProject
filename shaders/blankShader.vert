@@ -27,7 +27,7 @@ void main() {
     vec4 worldPos = ubo.model * vec4(mPos, 1.0);
     vWorldPos = worldPos.xyz;
     vNormal = mat3(transpose(inverse(ubo.model))) * normal;
-    vTangent = mat3(ubo.model) * T; // Èô T ÊÇ¾Ö²¿¿Õ¼äÇÐÏß
+    vTangent = mat3(ubo.model) * T; // è‹¥ T æ˜¯å±€éƒ¨ç©ºé—´åˆ‡çº¿
     vTex = tex;
     vFlip = flip;
     vLightSpacePos = ubo.lightProj * ubo.lightView * worldPos;

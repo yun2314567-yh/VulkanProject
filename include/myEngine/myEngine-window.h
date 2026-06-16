@@ -43,7 +43,7 @@ namespace myEngine
 
 		void resetWindowResizedFlag() { windowIsResized = false; }
 		
-		//创建Vulkan表面
+		//鍒涘缓Vulkan琛ㄩ潰
 		void createWindowSurface(VkInstance &instance,VkSurfaceKHR &surface);
 		
 		VkExtent2D getExtent2D() { return { static_cast<uint32_t>(width),static_cast<uint32_t>(height) }; }

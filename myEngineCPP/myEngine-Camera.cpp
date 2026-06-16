@@ -34,7 +34,7 @@ namespace myEngine
 			pos += moveSpeed * glm::normalize(glm::cross(front, up));
         if(moveFlag==BACK)
 			pos-= moveSpeed * front;
-        // 正常语义：UP 增加 Y，DOWN 减少 Y
+        // 姝ｅ父璇箟锛歎P 澧炲姞 Y锛孌OWN 鍑忓皯 Y
 		if (moveFlag == UP)
 			pos.y += moveSpeed;
 		if (moveFlag == DOWN)

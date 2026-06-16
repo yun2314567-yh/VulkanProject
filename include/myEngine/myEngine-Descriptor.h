@@ -105,7 +105,7 @@ namespace myEngine {
 		DescriptorWriter(DescriptorSetLayout& setLayout, DescriptorPool& pool);
 		DescriptorWriter& writeBuffer(uint32_t bindingLocation, VkDescriptorBufferInfo& bufferInfo);
 		DescriptorWriter& writeImage(uint32_t bindingLocation, VkDescriptorImageInfo& imageInfo);
-		bool build(VkDescriptorSet& descriptorSet);//在指令写入时直接调用
+		bool build(VkDescriptorSet& descriptorSet);//鍦ㄦ寚浠ゅ啓鍏ユ椂鐩存帴璋冪敤
 		void update(VkDescriptorSet& descriptorSet);
 	private:
 		void overwrite(VkDescriptorSet& descriptorSet);

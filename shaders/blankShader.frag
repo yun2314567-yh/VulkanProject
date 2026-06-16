@@ -10,14 +10,14 @@ layout(location=0) out vec4 fragColor;
 
 layout(set=0,binding=0) uniform sampler2D diffuseMap;
 layout(set=0,binding=1) uniform sampler2D normalMap;
-layout(set=2,binding=0) uniform sampler2D shadowMap; // »ò sampler2D£¬¸ù¾İÄãµÄ shadow sampler ÀàĞÍ
+layout(set=2,binding=0) uniform sampler2D shadowMap; // æˆ– sampler2Dï¼Œæ ¹æ®ä½ çš„ shadow sampler ç±»å‹
 
 
 
 float computeShadow(vec4 lightSpacePos, vec3 normal, vec3 lightDir) {
     vec3 projCoords = lightSpacePos.xyz / lightSpacePos.w;
     vec2 uv = projCoords.xy * 0.5 + 0.5;
-    float currentDepth = projCoords.z; // ZO: ÒÑ¾­ÔÚ [0,1]
+    float currentDepth = projCoords.z; // ZO: å·²ç»åœ¨ [0,1]
 
     // outside light frustum -> no shadow
     if (uv.x < 0.0 || uv.x > 1.0 || uv.y < 0.0 || uv.y > 1.0 || currentDepth > 1.0) {
@@ -46,11 +46,11 @@ float computeShadow(vec4 lightSpacePos, vec3 normal, vec3 lightDir) {
         }
     }
     shadow /= 9;
-    // ·µ»Ø¿É¼û¶È£¨1 = lit, 0 = in shadow£©
+    // è¿”å›å¯è§åº¦ï¼ˆ1 = lit, 0 = in shadowï¼‰
     
 
-    float eps = 2; // ¿ØÖÆÈí»¯¿í¶È£¨ÊÀ½çµ¥Î»»òÏà¶ÔÖµ£©
-    float s = smoothstep(-eps, eps, 1-shadow); // ´Ó0µ½1Æ½»¬
+    float eps = 2; // æ§åˆ¶è½¯åŒ–å®½åº¦ï¼ˆä¸–ç•Œå•ä½æˆ–ç›¸å¯¹å€¼ï¼‰
+    float s = smoothstep(-eps, eps, 1-shadow); // ä»0åˆ°1å¹³æ»‘
     return s;
     
    
@@ -64,7 +64,7 @@ void main() {
     vec3 T = normalize(vTangent);
     T = normalize(T - N * dot(N, T));
     if (length(T) < 1e-4) {
-    // Ñ¡ÔñÒ»¸öÓë N ²»¹²ÏßµÄÈÎÒâÏòÁ¿×÷ÎªÇĞÏß»ù
+    // é€‰æ‹©ä¸€ä¸ªä¸ N ä¸å…±çº¿çš„ä»»æ„å‘é‡ä½œä¸ºåˆ‡çº¿åŸº
     vec3 tmp = abs(N.x) > 0.9 ? vec3(0.0, 1.0, 0.0) : vec3(1.0, 0.0, 0.0);
     T = normalize(tmp - N * dot(N, tmp));
     }

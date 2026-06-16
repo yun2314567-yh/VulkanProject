@@ -26,7 +26,7 @@ namespace myEngine
 
 	void Material::setTexturePool()
 	{
-		if (textureTypes.empty()) throw std::runtime_error("???????????);
+		if (textureTypes.empty()) throw std::runtime_error("先设置纹理类型");
 
 		textureDescriptorPool = DescriptorPool::Builder(device).setmaxSets(500)
 			.addPoolSize(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, textureTypes.size())
@@ -93,7 +93,7 @@ namespace myEngine
 					.build(uboSets[modelName][i]);
 
 				if (!success)
-					throw std::runtime_error("UBO????????????");
+					throw std::runtime_error("UBO描述符集创建失败");
 			}
 
 		}
@@ -154,7 +154,7 @@ namespace myEngine
 		int texWidth, texHeight, texChannels;
 		stbi_uc* pixels = stbi_load(path.c_str(), &texWidth, &texHeight, &texChannels, STBI_rgb_alpha);
 		if (!pixels)
-			throw std::runtime_error("?????????: " + path);
+			throw std::runtime_error("纹理路径无效: " + path);
 		VkDeviceSize imageSize = texWidth * texHeight * 4;
 		Buffer stageBuffer(device, imageSize, 1, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, 0);
 		stageBuffer.mapMemory();
@@ -196,17 +196,20 @@ namespace myEngine
 	
 		if (pipelineLayout != VK_NULL_HANDLE) {
 		
+			//device.unregisterPipelineLayout(pipelineLayout);		
 			vkDestroyPipelineLayout(device.getLogicalDevice(), pipelineLayout, nullptr);		
 			pipelineLayout = VK_NULL_HANDLE;
 	
 		}
 	
 		if (vkCreatePipelineLayout(device.getLogicalDevice(), &pipelineLayoutInfo, nullptr, &pipelineLayout) != VK_SUCCESS)
-		throw std::runtime_error("????????????");
+		throw std::runtime_error("管线布局创建失败");
 
 	
 		// Register created pipeline layout with Device for tracking	
-		}
+		//device.registerPipelineLayout(pipelineLayout);
+
+	}
 
 	void  Material::createWhiteTexture()
 	{
@@ -214,7 +217,7 @@ namespace myEngine
 
 		VkDeviceSize imageSize = texWidth * texHeight * 4;
 
-		unsigned char pixels[] = { 255, 255, 255, 255 }; // ?????????
+		unsigned char pixels[] = { 255, 255, 255, 255 }; // 白色像素数据
 
 		Buffer stageBuffer(device, imageSize, 1, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, 0);
 		stageBuffer.mapMemory();

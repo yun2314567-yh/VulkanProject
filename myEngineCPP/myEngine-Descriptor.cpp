@@ -218,6 +218,7 @@ namespace myEngine
 		if (!success)
 			return false;
 		overwrite(descriptorSet);
+		writes.clear();
 		return true;
 	}
 

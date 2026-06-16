@@ -222,12 +222,7 @@ namespace myEngine
 
 
 
-		/*if (!v.empty()) {
-			std::cout << "generateMesh: first vertex pos = (" << v[0].pos.x << ", " << v[0].pos.y << ", " << v[0].pos.z << ")\n";
-		}
-		std::cout << "generateMesh: indices count = " << id.size() << ", first up to 10: ";
-		for (size_t k = 0; k < id.size() && k < 10; ++k) std::cout << id[k] << " ";
-		std::cout << "\n";*/
+		
 	    
 		auto& mat = materialLists[0];
 

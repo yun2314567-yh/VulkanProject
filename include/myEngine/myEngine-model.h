@@ -28,7 +28,7 @@ namespace myEngine
 		float biTangentFilp;
 		static VkVertexInputBindingDescription getBindingDescription() {
 			VkVertexInputBindingDescription bindingDescription{};
-			bindingDescription.binding = 0;//×÷ÓÃÓÚvkcmdvertexBuffer
+			bindingDescription.binding = 0;//ä½œç”¨äºvkcmdvertexBuffer
 			bindingDescription.stride = sizeof(Vertex);
 			bindingDescription.inputRate = VK_VERTEX_INPUT_RATE_VERTEX;
 
@@ -38,7 +38,7 @@ namespace myEngine
 		static VkVertexInputBindingDescription2EXT getBindingDescription2() {
 			VkVertexInputBindingDescription2EXT bindingDescription{};
 			bindingDescription.sType = VK_STRUCTURE_TYPE_VERTEX_INPUT_BINDING_DESCRIPTION_2_EXT;
-			bindingDescription.binding = 0;//×÷ÓÃÓÚvkcmdvertexBuffer
+			bindingDescription.binding = 0;//ä½œç”¨äºvkcmdvertexBuffer
 			bindingDescription.stride = sizeof(Vertex);
 			bindingDescription.inputRate = VK_VERTEX_INPUT_RATE_VERTEX;
 			bindingDescription.divisor = 1; 
@@ -87,13 +87,13 @@ namespace myEngine
 		{
 			std::array<VkVertexInputAttributeDescription, 5> attributeDescriptions = {};
 
-			// Î»ÖÃ£ºvec3£¬Æ«ÒÆÁ¿Îª 0
+			// ä½ç½®ï¼švec3ï¼Œåç§»é‡ä¸º 0
 			attributeDescriptions[0].binding = 0;
 			attributeDescriptions[0].location = 0;
 			attributeDescriptions[0].format = VK_FORMAT_R32G32B32_SFLOAT;
 			attributeDescriptions[0].offset = offsetof(Vertex, pos);
 
-			// ÑÕÉ«£ºvec3£¬Æ«ÒÆÁ¿ÔÚÎ»ÖÃÖ®ºó
+			// é¢œè‰²ï¼švec3ï¼Œåç§»é‡åœ¨ä½ç½®ä¹‹å
 			
 
 			attributeDescriptions[1].binding = 0;
