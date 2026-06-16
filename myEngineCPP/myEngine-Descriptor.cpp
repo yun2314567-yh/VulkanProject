@@ -162,19 +162,17 @@ namespace myEngine
 		auto& bindingsInfo = setLayout.bindingsInfo[bindingLocation];
 
 		
-      // store the buffer info in cache first
-		bufferCache.push_back(bufferInfo);
+     
 		VkWriteDescriptorSet write = {};
 		write.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
 		write.dstBinding = bindingLocation;
 		write.descriptorType = bindingsInfo.descriptorType;
-		// Do not set pBufferInfo yet: bufferCache may reallocate and invalidate pointers.
-		write.pBufferInfo = nullptr;
+		
+		write.pBufferInfo = &bufferInfo;
 		write.descriptorCount = bindingsInfo.descriptorCount;
 
 		writes.push_back(write);
-		// record which write corresponds to this bufferCache entry
-		bufferWriteIndices.push_back(writes.size() - 1);
+		
 
 		return *this;
 	}
@@ -190,18 +188,17 @@ namespace myEngine
 			bindingsInfo.descriptorCount == 1 &&
 			"描述符数量与绑定数量不匹配");
         // store the image info in cache first
-		imageCache.push_back(imageInfo);
+		
 		VkWriteDescriptorSet write = {};
 		write.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
 		write.dstBinding = bindingLocation;
 		write.descriptorType = bindingsInfo.descriptorType;
-		// Do not set pImageInfo yet: imageCache may reallocate and invalidate pointers.
-		write.pImageInfo = nullptr;
+		
+		write.pImageInfo = &imageInfo;
 		write.descriptorCount = bindingsInfo.descriptorCount;
 
 		writes.push_back(write);
-		// record which write corresponds to this imageCache entry
-		imageWriteIndices.push_back(writes.size() - 1);
+		
 
 		return *this;
 	}
@@ -212,6 +209,7 @@ namespace myEngine
 			throw std::runtime_error("描述符集未赋值/描述符未分配内存");
 
 		overwrite(descriptorSet);
+		writes.clear();
 	}
 
 	bool DescriptorWriter::build(VkDescriptorSet& descriptorSet)
@@ -225,21 +223,7 @@ namespace myEngine
 
 	void DescriptorWriter::overwrite(VkDescriptorSet& descriptorSet)//VkDescriptorSet本身即为一个数组
 	{
-      // assign stable pointers from caches to the corresponding writes
-		for (size_t i = 0; i < bufferWriteIndices.size(); ++i) {
-			size_t widx = bufferWriteIndices[i];
-			// there should be one bufferCache entry per buffer write
-			if (widx < writes.size() && i < bufferCache.size()) {
-				writes[widx].pBufferInfo = &bufferCache[i];
-			}
-		}
-		for (size_t i = 0; i < imageWriteIndices.size(); ++i) {
-			size_t widx = imageWriteIndices[i];
-			if (widx < writes.size() && i < imageCache.size()) {
-				writes[widx].pImageInfo = &imageCache[i];
-			}
-		}
-
+   
 		for (auto& write : writes)
 			write.dstSet = descriptorSet;
 		vkUpdateDescriptorSets(pool.device.getLogicalDevice(), static_cast<uint32_t>(writes.size()), writes.data(), 0, nullptr);

@@ -112,12 +112,7 @@ namespace myEngine {
 		DescriptorSetLayout& setLayout;
 		DescriptorPool& pool;
         std::vector<VkWriteDescriptorSet> writes;
-		std::vector<VkDescriptorImageInfo> imageCache;
-		std::vector<VkDescriptorBufferInfo> bufferCache;
-		// indices of writes that correspond to entries in imageCache / bufferCache
-		// used to assign stable pointers in overwrite() to avoid pointer invalidation
-		std::vector<size_t> imageWriteIndices;
-		std::vector<size_t> bufferWriteIndices;
+		
 	};
 	
 }
