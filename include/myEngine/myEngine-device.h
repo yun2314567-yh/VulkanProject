@@ -167,7 +167,7 @@ namespace myEngine
 
 		Window& _window;
 
-		SwapChainSupportDetails swapChainSupport;
+
 
 		
 

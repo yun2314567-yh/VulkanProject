@@ -22,7 +22,7 @@ namespace myEngine
 		allocInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
 		allocInfo.commandBufferCount = (uint32_t)commandBuffers.size();
 		if (vkAllocateCommandBuffers(device.getLogicalDevice(), &allocInfo, commandBuffers.data()) != VK_SUCCESS)
-			throw std::runtime_error("分配指令的缓冲区失败");
+			throw std::runtime_error("???????????????");
 	}
 
 	
@@ -44,14 +44,14 @@ namespace myEngine
 			std::shared_ptr<SwapChain> oldSwapChain = std::move(swapChain);
 			swapChain = std::make_unique<SwapChain>(device,extent,oldSwapChain);
 			if (!oldSwapChain->compareSwapFormat(*swapChain.get()))
-				throw std::runtime_error("新旧交换链Format已更改");
+				throw std::runtime_error("????????ormat?????);
 		}
 
 	}
 
 	VkCommandBuffer Renderer::beginFrame()
 	{
-		assert(!isFrameStarted && "上一帧未结束");
+		assert(!isFrameStarted && "?????????");
 
 		auto result = swapChain->acquireNextImage(&currentImageIndex);
 
@@ -62,7 +62,7 @@ namespace myEngine
 		}
 		
 		if(result!=VK_SUCCESS && result!=VK_SUBOPTIMAL_KHR)
-			throw std::runtime_error("申请交换链图像失败");
+			throw std::runtime_error("??????????????);
 		
 		isFrameStarted = true;
 
@@ -73,17 +73,17 @@ namespace myEngine
 		
 
 		if(vkBeginCommandBuffer(commandBuffer, &beginInfo) != VK_SUCCESS)
-			throw std::runtime_error("开始指令缓冲区失败");
+			throw std::runtime_error("??????????????");
 
 		return commandBuffer;
 	}
 
 	void Renderer::endFrame()
 	{
-		assert(isFrameStarted && "帧未开始");
+		assert(isFrameStarted && "???????);
 		auto commandBuffer = getCurrentCommandBuffer();
 		if(vkEndCommandBuffer(commandBuffer) != VK_SUCCESS)
-			throw std::runtime_error("结束指令缓冲区失败");
+			throw std::runtime_error("??????????????);
 		auto result = swapChain->submitCommandBuffers(&commandBuffer, &currentImageIndex);
 		//std::cout << "Present result: " << result << std::endl;
 
@@ -93,34 +93,16 @@ namespace myEngine
 			recreateSwapChain();
 		}
 		else if(result != VK_SUCCESS)
-			throw std::runtime_error("提交交换链图像失败");
+			throw std::runtime_error("??????????????);
 		isFrameStarted = false;
 		currentFrameIndex = (currentFrameIndex + 1) % MAX_FRAMEBUFFERS_IN_SAMETIME;
 	}
 
 	void Renderer::beginRenderPass(VkCommandBuffer commandBuffer)
 	{
-		/*assert(isFrameStarted && "帧未开始");
-		assert(commandBuffer == getCurrentCommandBuffer() && "不是当前帧的指令缓冲区");
-
-		std::array<VkClearValue, 2> clearValues = {};
-		clearValues[0].color = { 1.f,1.f,1.f,1.f };
-		clearValues[1].depthStencil = { 1.f,0 };
-
-		VkRenderPassBeginInfo renderPassInfo = {};
-
-		renderPassInfo.renderArea.offset = { 0,0 };
-		renderPassInfo.renderArea.extent = swapChain->getSwapChainExtent();
-		renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
-		renderPassInfo.renderPass = swapChain->getRenderPass();
-		renderPassInfo.framebuffer = swapChain->getFrameBuffer(currentImageIndex);
-		renderPassInfo.clearValueCount = static_cast<uint32_t>(clearValues.size());
-		renderPassInfo.pClearValues = clearValues.data();
-
-		//第三个参数表示是否有辅助指令缓冲区，现在没有
-		vkCmdBeginRenderPass(commandBuffer, &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);*/
-		assert(isFrameStarted && "帧未开始");
-		assert(commandBuffer == getCurrentCommandBuffer() && "不是当前帧的指令缓冲区");
+		
+		assert(isFrameStarted && "???????);
+		assert(commandBuffer == getCurrentCommandBuffer() && "?????????????????);
 
 		
 
@@ -179,8 +161,8 @@ namespace myEngine
 
 	void Renderer::endRenderPass(VkCommandBuffer commandBuffer)
 	{
-		assert(isFrameStarted && "帧未开始");
-		assert(commandBuffer == getCurrentCommandBuffer() && "不是当前帧的指令缓冲区");
+		assert(isFrameStarted && "???????);
+		assert(commandBuffer == getCurrentCommandBuffer() && "?????????????????);
 
 		
 		vkCmdEndRendering(commandBuffer);

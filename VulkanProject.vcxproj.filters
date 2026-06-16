@@ -1,195 +1,186 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="源文件">
+    <Filter Include="???">
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
-    <Filter Include="头文件">
+    <Filter Include="???">
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
     </Filter>
-    <Filter Include="资源文件">
+    <Filter Include="????">
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="头文件\imgui_h">
+    <Filter Include="???\imgui_h">
       <UniqueIdentifier>{0a5612a2-241e-41c9-a6b0-2813167efbb3}</UniqueIdentifier>
     </Filter>
-    <Filter Include="源文件\imguiCPP">
+    <Filter Include="???\imguiCPP">
       <UniqueIdentifier>{7934a787-7ea9-435f-818f-5af5108b2869}</UniqueIdentifier>
     </Filter>
-    <Filter Include="源文件\myEngineCPP">
+    <Filter Include="???\myEngineCPP">
       <UniqueIdentifier>{6dc33d88-9106-43d3-a38a-e03a077e1cc9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="头文件\myEngine">
+    <Filter Include="???\myEngine">
       <UniqueIdentifier>{1bf09d09-00ad-4aa2-9680-eec7687c7dee}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
-      <Filter>源文件</Filter>
+      <Filter>???</Filter>
     </ClCompile>
     <ClCompile Include="include\imgui\imgui.cpp">
-      <Filter>源文件\imguiCPP</Filter>
+      <Filter>???\imguiCPP</Filter>
     </ClCompile>
     <ClCompile Include="include\imgui\imgui_demo.cpp">
-      <Filter>源文件\imguiCPP</Filter>
+      <Filter>???\imguiCPP</Filter>
     </ClCompile>
     <ClCompile Include="include\imgui\imgui_draw.cpp">
-      <Filter>源文件\imguiCPP</Filter>
+      <Filter>???\imguiCPP</Filter>
     </ClCompile>
     <ClCompile Include="include\imgui\imgui_impl_glfw.cpp">
-      <Filter>源文件\imguiCPP</Filter>
+      <Filter>???\imguiCPP</Filter>
     </ClCompile>
     <ClCompile Include="include\imgui\imgui_impl_vulkan.cpp">
-      <Filter>源文件\imguiCPP</Filter>
+      <Filter>???\imguiCPP</Filter>
     </ClCompile>
     <ClCompile Include="include\imgui\imgui_tables.cpp">
-      <Filter>源文件\imguiCPP</Filter>
+      <Filter>???\imguiCPP</Filter>
     </ClCompile>
     <ClCompile Include="include\imgui\imgui_widgets.cpp">
-      <Filter>源文件\imguiCPP</Filter>
+      <Filter>???\imguiCPP</Filter>
     </ClCompile>
     <ClCompile Include="myEngineCPP\myEngine-ShaderManager.cpp">
-      <Filter>源文件\myEngineCPP</Filter>
+      <Filter>???\myEngineCPP</Filter>
     </ClCompile>
     <ClCompile Include="myEngineCPP\myEngine-App.cpp">
-      <Filter>源文件\myEngineCPP</Filter>
+      <Filter>???\myEngineCPP</Filter>
     </ClCompile>
     <ClCompile Include="myEngineCPP\myEngine-buffer.cpp">
-      <Filter>源文件\myEngineCPP</Filter>
+      <Filter>???\myEngineCPP</Filter>
     </ClCompile>
     <ClCompile Include="myEngineCPP\myEngine-Camera.cpp">
-      <Filter>源文件\myEngineCPP</Filter>
+      <Filter>???\myEngineCPP</Filter>
     </ClCompile>
     <ClCompile Include="myEngineCPP\myEngine-Descriptor.cpp">
-      <Filter>源文件\myEngineCPP</Filter>
+      <Filter>???\myEngineCPP</Filter>
     </ClCompile>
     <ClCompile Include="myEngineCPP\myEngine-device.cpp">
-      <Filter>源文件\myEngineCPP</Filter>
+      <Filter>???\myEngineCPP</Filter>
     </ClCompile>
     <ClCompile Include="myEngineCPP\myEngine-Gui.cpp">
-      <Filter>源文件\myEngineCPP</Filter>
+      <Filter>???\myEngineCPP</Filter>
     </ClCompile>
     <ClCompile Include="myEngineCPP\myEngine-model.cpp">
-      <Filter>源文件\myEngineCPP</Filter>
+      <Filter>???\myEngineCPP</Filter>
     </ClCompile>
     <ClCompile Include="myEngineCPP\myEngine-offScreenRenderer.cpp">
-      <Filter>源文件\myEngineCPP</Filter>
-    </ClCompile>
-    <ClCompile Include="myEngineCPP\myEngine-pipeline.cpp">
-      <Filter>源文件\myEngineCPP</Filter>
+      <Filter>???\myEngineCPP</Filter>
     </ClCompile>
     <ClCompile Include="myEngineCPP\myEngine-Renderer.cpp">
-      <Filter>源文件\myEngineCPP</Filter>
+      <Filter>???\myEngineCPP</Filter>
     </ClCompile>
     <ClCompile Include="myEngineCPP\myEngine-RenderSystem.cpp">
-      <Filter>源文件\myEngineCPP</Filter>
+      <Filter>???\myEngineCPP</Filter>
     </ClCompile>
     <ClCompile Include="myEngineCPP\myEngine-swapChain.cpp">
-      <Filter>源文件\myEngineCPP</Filter>
+      <Filter>???\myEngineCPP</Filter>
     </ClCompile>
     <ClCompile Include="myEngineCPP\myEngine-Texture.cpp">
-      <Filter>源文件\myEngineCPP</Filter>
+      <Filter>???\myEngineCPP</Filter>
     </ClCompile>
     <ClCompile Include="myEngineCPP\myEngine-window.cpp">
-      <Filter>源文件\myEngineCPP</Filter>
+      <Filter>???\myEngineCPP</Filter>
     </ClCompile>
     <ClCompile Include="include\stb_image.cpp">
-      <Filter>头文件</Filter>
+      <Filter>???</Filter>
     </ClCompile>
     <ClCompile Include="include\volk.c">
-      <Filter>头文件</Filter>
+      <Filter>???</Filter>
     </ClCompile>
     <ClCompile Include="myEngineCPP\myEngine-Material.cpp">
-      <Filter>源文件\myEngineCPP</Filter>
+      <Filter>???\myEngineCPP</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Engine.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="include\myEngine\myEngine-ShaderManager.h">
-      <Filter>头文件\myEngine</Filter>
+      <Filter>???\myEngine</Filter>
     </ClInclude>
     <ClInclude Include="include\myEngine\myEngine-App.h">
-      <Filter>头文件\myEngine</Filter>
+      <Filter>???\myEngine</Filter>
     </ClInclude>
     <ClInclude Include="include\myEngine\myEngine-buffer.h">
-      <Filter>头文件\myEngine</Filter>
+      <Filter>???\myEngine</Filter>
     </ClInclude>
     <ClInclude Include="include\myEngine\myEngine-Camera.h">
-      <Filter>头文件\myEngine</Filter>
+      <Filter>???\myEngine</Filter>
     </ClInclude>
     <ClInclude Include="include\myEngine\myEngine-Descriptor.h">
-      <Filter>头文件\myEngine</Filter>
+      <Filter>???\myEngine</Filter>
     </ClInclude>
     <ClInclude Include="include\myEngine\myEngine-device.h">
-      <Filter>头文件\myEngine</Filter>
+      <Filter>???\myEngine</Filter>
     </ClInclude>
     <ClInclude Include="include\myEngine\myEngine-Gui.h">
-      <Filter>头文件\myEngine</Filter>
+      <Filter>???\myEngine</Filter>
     </ClInclude>
     <ClInclude Include="include\myEngine\myEngine-model.h">
-      <Filter>头文件\myEngine</Filter>
+      <Filter>???\myEngine</Filter>
     </ClInclude>
     <ClInclude Include="include\myEngine\myEngine-offScreenRenderer.h">
-      <Filter>头文件\myEngine</Filter>
-    </ClInclude>
-    <ClInclude Include="include\myEngine\myEngine-pipeline.h">
-      <Filter>头文件\myEngine</Filter>
+      <Filter>???\myEngine</Filter>
     </ClInclude>
     <ClInclude Include="include\myEngine\myEngine-Renderer.h">
-      <Filter>头文件\myEngine</Filter>
+      <Filter>???\myEngine</Filter>
     </ClInclude>
     <ClInclude Include="include\myEngine\myEngine-RenderSystem.h">
-      <Filter>头文件\myEngine</Filter>
+      <Filter>???\myEngine</Filter>
     </ClInclude>
     <ClInclude Include="include\myEngine\myEngine-swapChain.h">
-      <Filter>头文件\myEngine</Filter>
+      <Filter>???\myEngine</Filter>
     </ClInclude>
     <ClInclude Include="include\myEngine\myEngine-Texture.h">
-      <Filter>头文件\myEngine</Filter>
+      <Filter>???\myEngine</Filter>
     </ClInclude>
     <ClInclude Include="include\myEngine\myEngine-window.h">
-      <Filter>头文件\myEngine</Filter>
+      <Filter>???\myEngine</Filter>
     </ClInclude>
     <ClInclude Include="include\myEngine\readFile.h">
-      <Filter>头文件\myEngine</Filter>
+      <Filter>???\myEngine</Filter>
     </ClInclude>
     <ClInclude Include="include\stb_image.h">
-      <Filter>头文件</Filter>
+      <Filter>???</Filter>
     </ClInclude>
     <ClInclude Include="include\imgui\imgui_impl_glfw.h">
-      <Filter>头文件\imgui_h</Filter>
+      <Filter>???\imgui_h</Filter>
     </ClInclude>
     <ClInclude Include="include\imgui\imgui_impl_vulkan.h">
-      <Filter>头文件\imgui_h</Filter>
+      <Filter>???\imgui_h</Filter>
     </ClInclude>
     <ClInclude Include="include\imgui\imgui_internal.h">
-      <Filter>头文件\imgui_h</Filter>
+      <Filter>???\imgui_h</Filter>
     </ClInclude>
     <ClInclude Include="include\imgui\imstb_rectpack.h">
-      <Filter>头文件\imgui_h</Filter>
+      <Filter>???\imgui_h</Filter>
     </ClInclude>
     <ClInclude Include="include\imgui\imstb_textedit.h">
-      <Filter>头文件\imgui_h</Filter>
+      <Filter>???\imgui_h</Filter>
     </ClInclude>
     <ClInclude Include="include\imgui\imstb_truetype.h">
-      <Filter>头文件\imgui_h</Filter>
+      <Filter>???\imgui_h</Filter>
     </ClInclude>
     <ClInclude Include="include\imgui\imconfig.h">
-      <Filter>头文件\imgui_h</Filter>
+      <Filter>???\imgui_h</Filter>
     </ClInclude>
     <ClInclude Include="include\imgui\imgui.h">
-      <Filter>头文件\imgui_h</Filter>
+      <Filter>???\imgui_h</Filter>
     </ClInclude>
     <ClInclude Include="include\volk.h">
-      <Filter>头文件</Filter>
+      <Filter>???</Filter>
     </ClInclude>
     <ClInclude Include="include\myEngine\myEngine-Material.h">
-      <Filter>头文件\myEngine</Filter>
+      <Filter>???\myEngine</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

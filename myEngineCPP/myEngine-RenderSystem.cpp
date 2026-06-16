@@ -12,42 +12,13 @@ namespace myEngine
 		// RenderSystem does not own any pipeline layout; destruction handled by Material
 	}
 
-	/*void RenderSystem::createPipelineLayout(const std::vector<VkDescriptorSetLayout> descriptorSetLayouts)
-	{
-		std::cout << "RenderSystem::createPipelineLayout: received " << descriptorSetLayouts.size() << " set layouts:\n";
-		for (size_t i = 0; i < descriptorSetLayouts.size(); ++i) std::cout << "  setLayout[" << i << "] = " << descriptorSetLayouts[i] << "\n";
-
-		VkPipelineLayoutCreateInfo pipelineLayoutInfo = {};
-		pipelineLayoutInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
-		pipelineLayoutInfo.setLayoutCount = static_cast<uint32_t>(descriptorSetLayouts.size());
-		pipelineLayoutInfo.pSetLayouts = descriptorSetLayouts.data();
-		pipelineLayoutInfo.pushConstantRangeCount = 0;
-		pipelineLayoutInfo.pPushConstantRanges = nullptr;
-		
-		
-		
-
-     // RenderSystem should not create pipeline layouts; Material owns pipeline layouts.
-		std::cout << " RenderSystem::createPipelineLayout: (no-op) received " << descriptorSetLayouts.size() << " layouts\n";
-
-		
-	}*/
-	/*void RenderSystem::createPipeline(VkRenderPass renderPass)
-	{
-		assert(pipelineLayout != VK_NULL_HANDLE && "在创建管线之前必须先创建管线布局");
-		pipelineConfigInfo pipelineConfig{};
-		pipelineConfig.renderPass = renderPass;
-		pipelineConfig.pipelineLayout = pipelineLayout;
-		renderPipeline = std::make_unique<pipeline>(device, "shader/vert.spv", "shader/frag.spv", pipelineConfig);
-	}*/
+	
+	
 
 	void RenderSystem::renderModel(PipelineType pipelineType, VkCommandBuffer commandBuffer, Model* model,VkDescriptorSet shadowSet)
 	{
        //std::cout << "RenderSystem::renderModel called. pipelineLayout=" << pipelineLayout << " mvpSet=" << mvpDescritorSet << " model=" << model << "\n";
-		/*if (renderPipeline)
-			std::cout << " renderPipeline exists\n";
-		else
-			std::cout << " renderPipeline null\n";*/
+		
 		switch (pipelineType)
 		{
 		case myEngine::DEFAULT:
@@ -90,7 +61,7 @@ namespace myEngine
 		
 
 		vkCmdSetColorBlendEnableEXT(command, 0, 1, &MY_BOOL_FALSE);
-		assert(vkCmdSetLogicOpEnableEXT != nullptr && "扩展函数指针为空");
+		assert(vkCmdSetLogicOpEnableEXT != nullptr && "????????????");
 
 		
 		vkCmdSetLogicOpEnableEXT(command, MY_BOOL_FALSE);
@@ -149,7 +120,7 @@ namespace myEngine
 
 
 		vkCmdSetColorBlendEnableEXT(command, 0, 1, &MY_BOOL_FALSE);
-		assert(vkCmdSetLogicOpEnableEXT != nullptr && "扩展函数指针为空");
+		assert(vkCmdSetLogicOpEnableEXT != nullptr && "????????????");
 
 
 		vkCmdSetLogicOpEnableEXT(command, MY_BOOL_FALSE);

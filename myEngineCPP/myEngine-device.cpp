@@ -670,7 +670,7 @@ namespace myEngine
 			if ((typeFilter & (1 << i)) && (memProperty.memoryTypes[i].propertyFlags & properties) == properties)
 				return i;
 		}
-
+		throw std::runtime_error("无合适的内存");
 
 	}
 
